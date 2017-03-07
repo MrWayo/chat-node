@@ -1,6 +1,18 @@
 var socket = require('socket.io'),
     http = require('http'),
-    server = http.createServer(),
+    server = http.createServer(function(req, res){
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        // res.setHeader('Access-Control-Request-Method', '*');
+        // res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+        // res.setHeader('Access-Control-Allow-Headers', '*');
+        /*
+        if ( req.method === 'OPTIONS' ) {
+            res.writeHead(200);
+            res.end();
+            return;
+        }
+        */
+    }),
     socket = socket.listen(server);
 
 socket.on('connection', function(connection) {
@@ -9,13 +21,8 @@ socket.on('connection', function(connection) {
         socket.emit('message', msg);
     });
 });
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', config.allowedDomains);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-    next();
-}
 server.listen(3000, function(){
     console.log('Server started');
 });
+
